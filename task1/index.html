@@ -37,13 +37,14 @@
     <div id="notes-table">
 
     </div>
+
+
+    <div class="row justify-content-end" id="new-note-btn-container">
+        <button class="col-12 col-md-auto btn btn-secondary" id="new-note-btn">New todo</button>
+    </div>
 </div>
 
-<div class="row justify-content-end" id="new-note-btn-container">
-    <button class="col-12 col-md-auto btn btn-secondary" id="new-note-btn">New todo</button>
-</div>
-
-<div id="categories-table">
+<div id="categories-table-container">
     <div class="row align-items-center py-2 mt-5 text-white fw-bold rounded bg-secondary">
             <span class="col">
                 Note category
@@ -55,29 +56,8 @@
                 Archive
             </span>
     </div>
+    <div id="categories-table">
 
-    <div class="row align-items-center py-2 my-2 text-muted rounded border bg-light">
-        <span class="col text-dark fw-bold">Idea</span>
-        <span class="col">2</span>
-        <span class="col">7</span>
-    </div>
-
-    <div class="row align-items-center py-2 my-2 text-muted rounded border bg-light">
-        <span class="col text-dark fw-bold">Quote</span>
-        <span class="col">3</span>
-        <span class="col">4</span>
-    </div>
-
-    <div class="row align-items-center py-2 my-2 text-muted rounded border bg-light">
-        <span class="col text-dark fw-bold">Random Thought</span>
-        <span class="col">13</span>
-        <span class="col">4</span>
-    </div>
-
-    <div class="row align-items-center py-2 my-2 text-muted rounded border bg-light">
-        <span class="col text-dark fw-bold">Task</span>
-        <span class="col">13</span>
-        <span class="col">4</span>
     </div>
 </div>
 
@@ -97,10 +77,10 @@
                 <div class="col-12 col-md-6 mt-3 mt-md-0">
                     <label class="form-label fw-bold" for="new-note-form__note-category">Category of note</label>
                     <select class="col form-control" id="new-note-form__note-category">
-                        <option value="idea">Idea</option>
-                        <option value="quote">Quote</option>
-                        <option value="random">Random Thought</option>
-                        <option value="task">Task</option>
+                        <option value="Idea">Idea</option>
+                        <option value="Quote">Quote</option>
+                        <option value="Random Thought">Random Thought</option>
+                        <option value="Task">Task</option>
                     </select>
                 </div>
 

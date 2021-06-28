@@ -1,11 +1,11 @@
-const newNoteBtn = document.getElementById('new-note-btn')
-const newNoteBtnContainer = document.getElementById('new-note-btn-container')
-
+const notesTableContainer = document.getElementById('notes-table-container')
 const notesTable = document.getElementById('notes-table')
 const notesTableTitle = document.getElementById('notes-table__title')
 const notesTableArchiveBtn = document.getElementById('notes-table__archive-btn')
 const notesTableDeleteBtn = document.getElementById('notes-table__delete-btn')
+const newNoteBtn = document.getElementById('new-note-btn')
 
+const categoryTableContainer = document.getElementById('categories-table-container')
 const categoryTable = document.getElementById('categories-table')
 
 const newNoteForm = document.getElementById('new-note-form')
@@ -27,6 +27,13 @@ const state = {
     },
   ],
 
+  categories: [
+    {category: 'Idea', active: 1, archived: 0},
+    {category: 'Quote', active: 0, archived: 0},
+    {category: 'Random Thought', active: 0, archived: 0},
+    {category: 'Task', active: 0, archived: 0}
+  ],
+
   isArchive: false
 }
 
@@ -34,7 +41,7 @@ const onClickArchiveBtn = btn => {
   const note = btn.closest('.note')
   const name = note.children[0].textContent
 
-  if(state.isArchive) {
+  if (state.isArchive) {
     unzippedNote(name)
   } else {
     archiveNote(name)
@@ -51,16 +58,17 @@ const onClickDeleteBtn = btn => {
 notesTableArchiveBtn.addEventListener('click', () => {
   if (state.isArchive) {
     notesTableTitle.textContent = 'Active notes'
+    newNoteBtn.classList.remove('d-none')
   } else {
     notesTableTitle.textContent = 'Archived notes'
+    newNoteBtn.classList.add('d-none')
   }
   state.isArchive = !state.isArchive
   update()
 })
 
 notesTableDeleteBtn.addEventListener('click', () => {
-  state.notes = []
-  update()
+  state.notes.forEach(el => deleteNote(el.name))
 })
 
 newNoteBtn.addEventListener('click', () => {
@@ -79,7 +87,6 @@ createNoteBtn.addEventListener('click', e => {
   const content = newNoteTextInput.value
 
   addNote(name, category, content)
-  cleanFormNewNote()
   openPage('tables')
 })
 
@@ -90,6 +97,8 @@ cancelNoteBtn.addEventListener('click', e => {
 
 function update() {
   notesTable.innerHTML = ''
+  console.log(categoryTable)
+  categoryTable.innerHTML = ''
 
   state.notes.forEach(el => {
     if (el.archived !== state.isArchive) return
@@ -97,6 +106,12 @@ function update() {
     const {name, create, category, content, dates} = el
     const note = createNote(name, create, category, content, dates)
     notesTable.appendChild(note)
+  })
+
+  state.categories.forEach(el => {
+    const {category: categoryName, active, archived} = el
+    const category = createCategory(categoryName, active, archived)
+    categoryTable.appendChild(category)
   })
 }
 
@@ -111,12 +126,17 @@ function addNote(name, category, content) {
   state.notes.push({
     name, create, category, content, dates, archived: false
   })
+
+  state.categories.find(el => el.category === category).active++
   update()
 }
 
 function archiveNote(name) {
   const note = state.notes.find(el => el.name === name)
   note.archived = true
+
+  state.categories.find(el => el.category === note.category).active--
+  state.categories.find(el => el.category === note.category).archived++
 
   update()
 }
@@ -125,35 +145,54 @@ function unzippedNote(name) {
   const note = state.notes.find(el => el.name === name)
   note.archived = false
 
+  state.categories.find(el => el.category === note.category).active++
+  state.categories.find(el => el.category === note.category).archived--
+
   update()
 }
 
 function deleteNote(name) {
-  const index = state.notes
-    .indexOf(state.notes
-      .find(el => el.name === name)
-    )
+  const note = state.notes.find(el => el.name === name)
+  const index = state.notes.indexOf(note)
+  const category = state.categories.find(el => el.category === note.category)
 
   state.notes.splice(index, 1)
+  state.isArchive ? category.archived-- : category.active--
+
   update()
 }
 
-function getNotesIndexByName(name) {
-  state.notes.forEach((el, index) => {
-    if (el.name === name) return index
-  })
+function getNotesIndexByName(arr, name) {
+  let res = -1
 
-  return -1;
+  arr.forEach((el, index) => {
+    if (el.name === name) {
+      res = index
+    }
+  })
+  console.log(res)
+  return res;
 }
 
-function cleanFormNewNote() {
-  newNoteNameInput.value = null
-  newNoteCategoryInput.value = null
-  newNoteTextInput.value = null
+function setNewNoteContent(name, category, text) {
+  newNoteNameInput.value = name
+  newNoteCategoryInput.value = category
+  newNoteTextInput.value = text
 }
 
 function checkFormNewNote() {
   return newNoteNameInput.value !== '' && newNoteTextInput.value !== ''
+}
+
+function createCategory(categoryName, active, archived) {
+  const htmlString = `
+  <div class="row align-items-center py-2 my-2 text-muted rounded border bg-light">
+        <span class="col text-dark fw-bold">${categoryName}</span>
+        <span class="col">${active}</span>
+        <span class="col">${archived}</span>
+    </div>`
+
+  return createElementFromHTML(htmlString)
 }
 
 function createNote(name, create, category, content, dates) {
@@ -237,13 +276,11 @@ function setHideTables(hide) {
   const className = 'd-none'
 
   if (hide) {
-    notesTable.classList.add(className)
-    newNoteBtnContainer.classList.add(className)
-    categoryTable.classList.add(className)
+    notesTableContainer.classList.add(className)
+    categoryTableContainer.classList.add(className)
   } else {
-    notesTable.classList.remove(className)
-    newNoteBtnContainer.classList.remove(className)
-    categoryTable.classList.remove(className)
+    notesTableContainer.classList.remove(className)
+    categoryTableContainer.classList.remove(className)
   }
 }
 
@@ -255,6 +292,8 @@ function setHideNewNoteForm(hide) {
   } else {
     newNoteForm.classList.remove(className)
   }
+
+  setNewNoteContent(null, 'Idea', null)
 }
 
 
