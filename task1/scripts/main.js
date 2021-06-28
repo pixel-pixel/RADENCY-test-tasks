@@ -2,6 +2,10 @@ const newNoteBtn = document.getElementById('new-note-btn')
 const newNoteBtnContainer = document.getElementById('new-note-btn-container')
 
 const notesTable = document.getElementById('notes-table')
+const notesTableTitle = document.getElementById('notes-table__title')
+const notesTableArchiveBtn = document.getElementById('notes-table__archive-btn')
+const notesTableDeleteBtn = document.getElementById('notes-table__delete-btn')
+
 const categoryTable = document.getElementById('categories-table')
 
 const newNoteForm = document.getElementById('new-note-form')
@@ -11,6 +15,53 @@ const newNoteTextInput = document.getElementById('new-note-form__note-text')
 const createNoteBtn = document.getElementById('create-note-btn')
 const cancelNoteBtn = document.getElementById('cancel-form-btn')
 
+const state = {
+  notes: [
+    {
+      name: 'First note',
+      create: 'April 15, 2019',
+      category: 'Idea',
+      content: 'lol',
+      dates: '',
+      archived: false
+    },
+  ],
+
+  isArchive: false
+}
+
+const onClickArchiveBtn = btn => {
+  const note = btn.closest('.note')
+  const name = note.children[0].textContent
+
+  if(state.isArchive) {
+    unzippedNote(name)
+  } else {
+    archiveNote(name)
+  }
+}
+
+const onClickDeleteBtn = btn => {
+  const note = btn.closest('.note')
+  const name = note.children[0].textContent
+
+  deleteNote(name)
+}
+
+notesTableArchiveBtn.addEventListener('click', () => {
+  if (state.isArchive) {
+    notesTableTitle.textContent = 'Active notes'
+  } else {
+    notesTableTitle.textContent = 'Archived notes'
+  }
+  state.isArchive = !state.isArchive
+  update()
+})
+
+notesTableDeleteBtn.addEventListener('click', () => {
+  state.notes = []
+  update()
+})
 
 newNoteBtn.addEventListener('click', () => {
   openPage('form')
@@ -19,17 +70,15 @@ newNoteBtn.addEventListener('click', () => {
 createNoteBtn.addEventListener('click', e => {
   e.preventDefault()
 
-  if(!checkFormNewNote()){
+  if (!checkFormNewNote()) {
     throw Error('You must fill all inputs')
   }
 
   const name = newNoteNameInput.value
   const category = newNoteCategoryInput.value
-  const text = newNoteTextInput.value
+  const content = newNoteTextInput.value
 
-  const note = createNote(name, category, text)
-
-  notesTable.appendChild(note)
+  addNote(name, category, content)
   cleanFormNewNote()
   openPage('tables')
 })
@@ -38,6 +87,64 @@ cancelNoteBtn.addEventListener('click', e => {
   e.preventDefault();
   openPage('tables')
 })
+
+function update() {
+  notesTable.innerHTML = ''
+
+  state.notes.forEach(el => {
+    if (el.archived !== state.isArchive) return
+
+    const {name, create, category, content, dates} = el
+    const note = createNote(name, create, category, content, dates)
+    notesTable.appendChild(note)
+  })
+}
+
+function addNote(name, category, content) {
+  if (getNotesIndexByName(state.notes, name) !== -1) {
+    throw Error(`You already have note with name '${name}'`)
+  }
+
+  const create = getFormattedDate(new Date())
+  const dates = getDatesFrom(content)
+
+  state.notes.push({
+    name, create, category, content, dates, archived: false
+  })
+  update()
+}
+
+function archiveNote(name) {
+  const note = state.notes.find(el => el.name === name)
+  note.archived = true
+
+  update()
+}
+
+function unzippedNote(name) {
+  const note = state.notes.find(el => el.name === name)
+  note.archived = false
+
+  update()
+}
+
+function deleteNote(name) {
+  const index = state.notes
+    .indexOf(state.notes
+      .find(el => el.name === name)
+    )
+
+  state.notes.splice(index, 1)
+  update()
+}
+
+function getNotesIndexByName(name) {
+  state.notes.forEach((el, index) => {
+    if (el.name === name) return index
+  })
+
+  return -1;
+}
 
 function cleanFormNewNote() {
   newNoteNameInput.value = null
@@ -49,20 +156,17 @@ function checkFormNewNote() {
   return newNoteNameInput.value !== '' && newNoteTextInput.value !== ''
 }
 
-function createNote(name, category, content) {
-  const dateOfCreate = getFormattedDate(new Date())
-  const datesInText = getAllDatesFromStrings(content) ? getAllDatesFromStrings(content).join(', ') : ''
-
+function createNote(name, create, category, content, dates) {
   const htmlString = `
-        <div class="row justify-content-between align-items-center py-2 my-2 text-muted rounded border bg-light">
+    <div class="note row justify-content-between align-items-center py-2 my-2 text-muted rounded border bg-light">
         <span class="col-12 col-sm-6 col-md-3 col-xl-2 text-dark fw-bold">${name}</span>
-        <span class="col-12 col-sm-3 col-md-2 col-xl-2">${dateOfCreate}</span>
+        <span class="col-12 col-sm-3 col-md-2 col-xl-2">${create}</span>
         <span class="col-12 col-sm-3 col-md-2 col-xl-2">${category}</span>
         <span class="col-12 col-sm-9 col-md-3 col-xl-2">${content}</span>
-        <span class="col-12 col-sm-3 col-md-2 col-xl-2">${datesInText}</span>
+        <span class="col-12 col-sm-3 col-md-2 col-xl-2">${dates}</span>
 
         <div class="col-auto ms-auto">
-            <button class="btn btn-secondary mgx-2">
+            <button class="btn-edit btn btn-secondary mgx-2">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                      class="bi bi-pencil"
                      viewBox="0 0 16 16">
@@ -70,7 +174,7 @@ function createNote(name, category, content) {
                 </svg>
             </button>
 
-            <button class="btn btn-secondary mgx-2">
+            <button class="btn-archive btn btn-secondary mgx-2" onclick="onClickArchiveBtn(this)">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                      class="bi bi-archive"
                      viewBox="0 0 16 16">
@@ -78,7 +182,7 @@ function createNote(name, category, content) {
                 </svg>
             </button>
 
-            <button class="btn btn-danger mgx-2">
+            <button class="btn-delete btn btn-danger mgx-2" onclick="onClickDeleteBtn(this)">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                      class="bi bi-trash"
                      viewBox="0 0 16 16">
@@ -100,10 +204,11 @@ function getFormattedDate(date) {
   return months[date.getMonth()] + ` ${date.getDate()}, ${date.getFullYear()}`
 }
 
-function getAllDatesFromStrings(str) {
+function getDatesFrom(str) {
   const regExp = /\b(([0-2]?[1-9])|(3[0-2]))\/(0?[1-9]|(10)|(11)|(12))\/-?[0-9]+\b/g
+  const datesArray = str.match(regExp)
 
-  return str.match(regExp)
+  return datesArray ? datesArray.join(', ') : ''
 }
 
 function createElementFromHTML(htmlString) {
@@ -151,3 +256,6 @@ function setHideNewNoteForm(hide) {
     newNoteForm.classList.remove(className)
   }
 }
+
+
+update()
