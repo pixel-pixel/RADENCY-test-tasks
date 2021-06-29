@@ -16,16 +16,13 @@ function NewNoteFormContainer() {
           <div className="col-12 col-md-6">
             <TextInput label="Note name" placeholder="My plan..."/>
           </div>
-
           <div className="col-12 col-md-6 mt-3 mt-md-0">
             <SelectInput label="Category of note"
                          options={['Idea', 'Quote', 'Random Thought', 'Task']}/>
           </div>
-
           <div className="col-12 my-3">
             <TextInput label="Note text" placeholder="Today I`m doing... nothing:)"/>
           </div>
-
           <div className="col-auto">
             <CreateNoteFormBtn/>
           </div>
