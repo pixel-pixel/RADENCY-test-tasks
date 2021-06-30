@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Radency task 1</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body class="container d-flex flex-column">
+<div class="mt-1" id="notes-table-container">
+    <h1 class="fw-bold" id="notes-table__title">Active notes</h1>
+
+    <div class="row justify-content-between align-items-center my-2 text-white fw-bold rounded bg-secondary">
+        <span class="col-12 col-sm-6 col-md-3 col-xl-2">Name</span>
+        <span class="col-12 col-sm-3 col-md-2 col-xl-2">Created</span>
+        <span class="col-12 col-sm-3 col-md-2 col-xl-2">Category</span>
+        <span class="col-12 col-sm-9 col-md-3 col-xl-2">Content</span>
+        <span class="col-12 col-sm-3 col-md-2 col-xl-2">Dates</span>
+
+        <div class="col-auto ms-auto">
+            <button class="btn btn-secondary mgx-1" id="notes-table__archive-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                     class="bi bi-archive-fill" viewBox="0 0 16 16">
+                    <path d="M12.643 15C13.979 15 15 13.845 15 12.5V5H1v7.5C1 13.845 2.021 15 3.357 15h9.286zM5.5 7h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1 0-1zM.8 1a.8.8 0 0 0-.8.8V3a.8.8 0 0 0 .8.8h14.4A.8.8 0 0 0 16 3V1.8a.8.8 0 0 0-.8-.8H.8z"/>
+                </svg>
+            </button>
+
+            <button class="btn btn-secondary mgx-1" id="notes-table__delete-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                     class="bi bi-trash-fill" viewBox="0 0 16 16">
+                    <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <div id="notes-table">
+
+    </div>
+
+    <div class="row justify-content-end" id="new-note-btn-container">
+        <button class="col-12 col-md-auto btn btn-secondary" id="new-note-btn">New todo</button>
+    </div>
+</div>
+
+<div id="categories-table-container">
+    <div class="row align-items-center py-2 mt-5 text-white fw-bold rounded bg-secondary">
+        <span class="col">Note category</span>
+        <span class="col">Active</span>
+        <span class="col">Archive</span>
+    </div>
+
+    <div id="categories-table">
+
+    </div>
+</div>
+
+<div class="container p-0 card position-absolute top-50 start-50 translate-middle d-none" id="new-note-form">
+    <h5 class="card-header text-white text-center fw-bold bg-secondary">
+        New note
+    </h5>
+
+    <div class="card-body bg-light">
+        <form>
+            <div class="row justify-content-end">
+                <div class="col-12 col-md-6">
+                    <label class="form-label fw-bold" for="new-note-form__note-name">Note name</label>
+                    <input class="form-control" id="new-note-form__note-name" type="text" placeholder="My plan..."/>
+                </div>
+
+                <div class="col-12 col-md-6 mt-3 mt-md-0">
+                    <label class="form-label fw-bold" for="new-note-form__note-category">Category of note</label>
+                    <select class="col form-control" id="new-note-form__note-category">
+                        <option value="Idea">Idea</option>
+                        <option value="Quote">Quote</option>
+                        <option value="Random Thought">Random Thought</option>
+                        <option value="Task">Task</option>
+                    </select>
+                </div>
+
+                <div class="col-12 my-3">
+                    <label class="form-label fw-bold" for="new-note-form__note-text">Note text</label>
+                    <input class="form-control" id="new-note-form__note-text" type="text"
+                           placeholder="Today I`m doing... nothing:)"/>
+                </div>
+
+                <div class="col-auto">
+                    <button class="btn btn-secondary" id="create-note-btn" type="submit">
+                        Create
+                    </button>
+                </div>
+
+                <div class="col-auto">
+                    <button class="btn btn-danger" id="cancel-form-btn" type="submit">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script type="module" src="scripts/index.js"></script>
+</body>
+</html>
