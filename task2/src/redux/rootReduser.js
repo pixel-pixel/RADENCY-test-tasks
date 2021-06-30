@@ -6,22 +6,33 @@ import {
   EDIT_NOTE_STATUS, INIT,
   OPEN_ARCHIVE,
   OPEN_NEW_NOTE_FORM,
-  UNZIP_NOTE, UPDATE, UPDATE_NOTE
+  UNZIP_NOTE, UPDATE
 } from "./actionTypes.js";
 
 function rootReduser(state, action) {
   switch (action.type) {
-    case INIT: return state
-    case UPDATE: return state
-    case OPEN_NEW_NOTE_FORM: return openNewNoteForm(state, action.open)
-    case OPEN_ARCHIVE: return openArchive(state, action.open)
-    case DELETE_ALL: return deleteAllNotes(state)
-    case CREATE_NOTE: return createNote(state, action.note)
-    case EDIT_NOTE_STATUS: return editNoteStatus(state, action.noteName)
-    case DELETE_NOTE: return deleteNote(state, action.noteName)
-    case ARCHIVE_NOTE: return archiveNote(state, action.noteName)
-    case UNZIP_NOTE: return unzipNote(state, action.noteName)
-    default: return state
+    case INIT:
+      return state
+    case UPDATE:
+      return state
+    case OPEN_NEW_NOTE_FORM:
+      return openNewNoteForm(state, action.open)
+    case OPEN_ARCHIVE:
+      return openArchive(state, action.open)
+    case DELETE_ALL:
+      return deleteAllNotes(state)
+    case CREATE_NOTE:
+      return createNote(state, action.note)
+    case EDIT_NOTE_STATUS:
+      return editNoteStatus(state, action.noteName)
+    case DELETE_NOTE:
+      return deleteNote(state, action.noteName)
+    case ARCHIVE_NOTE:
+      return archiveNote(state, action.noteName)
+    case UNZIP_NOTE:
+      return unzipNote(state, action.noteName)
+    default:
+      return state
   }
 }
 
