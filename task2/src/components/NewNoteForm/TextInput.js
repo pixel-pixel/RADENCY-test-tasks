@@ -1,12 +1,11 @@
 import React from 'react'
 
-function TextInput({label, value, placeholder, onChange}) {
+function TextInput({label, placeholder, onChange}) {
   return (
     <React.Fragment>
       <label className="form-label fw-bold">{label}</label>
       <input className="form-control"
              type="text"
-             value={value}
              placeholder={placeholder}
              onChange={onChange}
       />

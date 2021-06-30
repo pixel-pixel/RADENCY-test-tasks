@@ -7,7 +7,7 @@ import {getDatesFrom, getFormattedDate} from "../../utils/utils";
 import store from "../../redux/store";
 import {createNote, deleteNote, openNewNoteForm} from "../../redux/actionCreators";
 
-function NewNoteForm() {
+function NewNoteForm({editNoteName}) {
   let name = '', category = 'Idea', content = ''
 
   const onNameInputChange = e => name = e.target.value
@@ -66,5 +66,7 @@ function NewNoteForm() {
     </form>
   )
 }
+
+const mstp = state => ({editNoteName: state.editNoteName})
 
 export default NewNoteForm
