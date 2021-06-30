@@ -1,39 +1,24 @@
 import React from 'react';
-import TextInput from "../components/TextInput";
-import SelectInput from "../components/SelectInput";
-import CancelFormBtn from "../components/CancelFormBtn";
-import CreateNoteFormBtn from "../components/CreateNoteFormBtn";
+import {connect} from "react-redux";
+import NewNoteForm from "../components/NewNoteForm/NewNoteForm";
 
-function NewNoteFormContainer() {
+function NewNoteFormContainer({visible}) {
+  let formClasses = 'container p-0 card position-absolute top-50 start-50 translate-middle'
+  formClasses += visible ? '' : ' d-none'
+
   return (
-    <div className="card">
+    <div className={formClasses}>
       <h5 className="card-header text-white text-center fw-bold bg-secondary">
         New note
       </h5>
 
       <div className="card-body bg-light">
-        <form className="row justify-content-end">
-          <div className="col-12 col-md-6">
-            <TextInput label="Note name" placeholder="My plan..."/>
-          </div>
-          <div className="col-12 col-md-6 mt-3 mt-md-0">
-            <SelectInput label="Category of note"
-                         options={['Idea', 'Quote', 'Random Thought', 'Task']}/>
-          </div>
-          <div className="col-12 my-3">
-            <TextInput label="Note text" placeholder="Today I`m doing... nothing:)"/>
-          </div>
-          <div className="col-auto">
-            <CreateNoteFormBtn/>
-          </div>
-
-          <div className="col-auto">
-            <CancelFormBtn/>
-          </div>
-        </form>
+        <NewNoteForm/>
       </div>
     </div>
   )
 }
 
-export default NewNoteFormContainer
+const mstp = state => ({visible: state.isNewNoteFragment})
+
+export default connect(mstp)(NewNoteFormContainer)

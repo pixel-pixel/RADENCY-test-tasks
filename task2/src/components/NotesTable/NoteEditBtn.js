@@ -1,8 +1,10 @@
 import React from 'react'
 
-function NoteEditBtn () {
+function NoteEditBtn ({onClick}) {
   return (
-    <button className="btn-edit btn btn-secondary">
+    <button className="btn-edit btn btn-secondary"
+            onClick={onClick}
+    >
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
            className="bi bi-pencil"
            viewBox="0 0 16 16">

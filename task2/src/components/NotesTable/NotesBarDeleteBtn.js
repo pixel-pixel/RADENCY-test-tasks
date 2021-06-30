@@ -1,8 +1,13 @@
 import React from 'react'
+import store from "../../redux/store";
+import {deleteAllNotes} from "../../redux/actionCreators";
 
 function NotesBarDeleteBtn() {
+  const onClick = () => store.dispatch(deleteAllNotes())
+
   return (
-    <button className="btn btn-secondary mgx-1">
+    <button className="btn btn-secondary mgx-1"
+            onClick={onClick}>
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
            className="bi bi-trash-fill" viewBox="0 0 16 16">
         <path

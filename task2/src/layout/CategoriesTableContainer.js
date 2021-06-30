@@ -1,14 +1,19 @@
 import React from 'react';
-import CategoriesBar from "../components/CategoriesBar";
-import CategoriesTable from "../components/CategoriesTable";
+import CategoriesBar from "../components/CategoriesTable/CategoriesBar";
+import CategoriesTable from "../components/CategoriesTable/CategoriesTable";
+import {connect} from "react-redux";
 
-function CategoriesTableContainer() {
+function CategoriesTableContainer({visible}) {
+  let tableClasses = visible ? '' : 'd-none'
+
   return (
-    <div>
+    <div className={tableClasses}>
       <CategoriesBar/>
       <CategoriesTable/>
     </div>
   )
 }
 
-export default CategoriesTableContainer
+const mstp = state => ({visible: !state.isNewNoteFragment})
+
+export default connect(mstp)(CategoriesTableContainer)

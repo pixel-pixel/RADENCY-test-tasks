@@ -1,8 +1,9 @@
 import React from 'react'
 
-function NoteDeleteBtn() {
+function NoteDeleteBtn({onClick}) {
   return (
-    <button className="btn-delete btn btn-danger">
+    <button className="btn-delete btn btn-danger"
+            onClick={onClick}>
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
            className="bi bi-trash"
            viewBox="0 0 16 16">
