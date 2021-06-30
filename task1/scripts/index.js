@@ -47,7 +47,7 @@ createNoteBtn.addEventListener('click', e => {
   const newNoteTextInput = document.getElementById('new-note-form__note-text')
 
   const name = newNoteNameInput.value
-  const create = getFormattedDate(new Date)
+  let create = getFormattedDate(new Date)
   const category = newNoteCategoryInput.value
   const content = newNoteTextInput.value
   const dates = getDatesFrom(content)
@@ -59,7 +59,11 @@ createNoteBtn.addEventListener('click', e => {
   }
 
   const editNoteName = store.getState().editNoteName
-  if (editNoteName !== null) store.dispatch(deleteNote(editNoteName))
+  if (editNoteName !== null) {
+    const editNote = store.getState().notes.find(el => el.name === editNoteName)
+    create = editNote.create
+    store.dispatch(deleteNote(editNoteName))
+  }
 
   store.dispatch(createNote(name, create, category, content, dates, false))
   store.dispatch(openNewNoteForm(false))
