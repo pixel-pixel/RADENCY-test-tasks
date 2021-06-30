@@ -26,71 +26,84 @@ function rootReduser(state, action) {
 }
 
 function openNewNoteForm(state, open) {
-  state.isNewNoteFragment = open
+  const isNewNoteFragment = open
 
-  return state
+  return {...state, isNewNoteFragment}
 }
 
 function openArchive(state, open) {
-  state.isArchive = open
+  const isArchive = open
 
-  return state
+  return {...state, isArchive}
 }
 
 function deleteAllNotes(state) {
-  state.notes = []
-  state.categories.forEach(el => {
+  const notes = []
+  const categories = [...state.categories]
+  categories.forEach(el => {
     el.active = 0
     el.archived = 0
   })
 
-  return state
+  return {...state, notes, categories}
 }
 
 function createNote(state, note) {
-  state.notes.push(note)
-  state.categories.find(el => el.category === note.category).active++
-  state.editNoteName = null
+  let {maxNoteIdKey} = state
 
-  return state
+  const notes = [...state.notes]
+  const categories = [...state.categories]
+  const editNoteName = null
+
+  note.key = ++maxNoteIdKey
+  notes.push(note)
+  categories.find(el => el.category === note.category).active++
+
+  return {...state, notes, categories, editNoteName, maxNoteIdKey}
 }
 
 function editNoteStatus(state, noteName) {
-  state.editNoteName = noteName
+  const editNoteName = noteName
 
-  return state
+  return {...state, editNoteName}
 }
 
 function deleteNote(state, noteName) {
   const note = state.notes.find(el => el.name === noteName)
   const index = state.notes.indexOf(note)
-  const category = state.categories.find(el => el.category === note.category)
+  const categories = [...state.categories]
+  const category = categories.find(el => el.category === note.category)
+  const notes = [...state.notes]
+  const editNoteName = null
 
-  state.notes.splice(index, 1)
+  notes.splice(index, 1)
   state.isArchive ? category.archived-- : category.active--
-  state.editNoteName = null
 
-  return state
+  return {...state, notes, categories, editNoteName}
 }
 
 function archiveNote(state, noteName) {
-  const note = state.notes.find(el => el.name === noteName)
+  const notes = [...state.notes]
+  const categories = [...state.categories]
+  const note = notes.find(el => el.name === noteName)
   note.archived = true
 
-  state.categories.find(el => el.category === note.category).active--
-  state.categories.find(el => el.category === note.category).archived++
+  categories.find(el => el.category === note.category).active--
+  categories.find(el => el.category === note.category).archived++
 
-  return state
+  return {...state, notes, categories}
 }
 
 function unzipNote(state, noteName) {
-  const note = state.notes.find(el => el.name === noteName)
+  const notes = [...state.notes]
+  const categories = [...state.categories]
+  const note = notes.find(el => el.name === noteName)
   note.archived = false
 
-  state.categories.find(el => el.category === note.category).active++
-  state.categories.find(el => el.category === note.category).archived--
+  categories.find(el => el.category === note.category).active++
+  categories.find(el => el.category === note.category).archived--
 
-  return state
+  return {...state, notes, categories}
 }
 
 export default rootReduser

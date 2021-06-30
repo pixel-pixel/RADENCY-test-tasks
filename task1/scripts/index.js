@@ -68,6 +68,7 @@ createNoteBtn.addEventListener('click', e => {
   store.dispatch(createNote(name, create, category, content, dates, false))
   store.dispatch(openNewNoteForm(false))
 })
+
 cancelNoteBtn.addEventListener('click', e => {
   e.preventDefault()
   store.dispatch(openNewNoteForm(false))
